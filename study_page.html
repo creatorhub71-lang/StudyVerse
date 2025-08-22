@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyVerse - My Study</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #6c63ff;
+            --primary-light: #837dff;
+            --secondary: #4a40cc;
+            --accent: #ff6b6b;
+            --accent-light: #ff8e8e;
+            --light: #f8f9fa;
+            --dark: #2c2c54;
+            --success: #28a745;
+            --warning: #ffc107;
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --hover: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: var(--accent);
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .hamburger {
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: var(--hover);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            width: 250px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e0e0e0;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .dropdown-menu .user-details h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .dropdown-menu .user-details p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            background: #6c63ff;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .dropdown-menu .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .dropdown-menu .menu-item:hover {
+            background: #e0e0e0;
+        }
+
+        .dropdown-menu .menu-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Batches Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .browse-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .browse-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .batches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .batch-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .batch-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-light);
+        }
+
+        .batch-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .batch-card .class {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .batch-card .features {
+            margin: 15px 0;
+        }
+
+        .batch-card .features li {
+            margin-bottom: 8px;
+            list-style-type: none;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .batch-card .features li:before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .batch-card .enroll-date {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin: 10px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .continue-btn {
+            flex: 2;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .continue-btn:hover {
+            background: var(--primary-light);
+        }
+
+        .unenroll-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(220, 53, 69, 0.2);
+            color: #ff8e8e;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(220, 53, 69, 0.4);
+        }
+
+        .unenroll-btn:hover {
+            background: rgba(220, 53, 69, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            margin-bottom: 50px;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 20px 5%;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .social-icons a {
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.8rem;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            footer {
+                padding: 15px;
+                margin-top: 30px;
+            }
+            
+            .footer-links {
+                gap: 10px;
+            }
+            
+            .footer-links a {
+                font-size: 0.8rem;
+            }
+            
+            .social-icons {
+                gap: 10px;
+            }
+            
+            .social-icons a {
+                font-size: 0.9rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text"></span>
+    </div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">STUDY<span>VERSE</span></div>
+        
+        <div class="menu-container">
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="dropdown-menu" id="dropdown-menu">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-details">
+                        <h4 id="user-name">Student Name</h4>
+                        <p>Premium Member</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" onclick="window.location.href='study.html'">
+                    <i class="fas fa-book"></i>
+                    <span>Study</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='batch_page.html'">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Batches</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='tests.html'">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Test Series</span>
+                </div>
+                <div class="menu-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-title">
+            <h1>My Learning Journey</h1>
+            <p>Continue your progress with enrolled courses. Track your achievements and unlock your potential.</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="enrolled-courses">0</div>
+                <div class="stat-label">Enrolled Courses</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="active-courses">0</div>
+                <div class="stat-label">Active Learning</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="completed-courses">0</div>
+                <div class="stat-label">Completed Courses</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="learning-hours">0</div>
+                <div class="stat-label">Learning Hours</div>
+            </div>
+        </div>
+
+        <!-- Enrolled Batches Section -->
+        <div class="section-header">
+            <h2>Your Courses</h2>
+            <a href="batch_page.html" class="browse-btn">Browse More</a>
+        </div>
+
+        <div class="batches-grid" id="batches-grid">
+            <!-- Enrolled batches will be displayed here -->
+        </div>
+
+        <!-- Empty State (if no batches enrolled) -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <i class="fas fa-book-open"></i>
+            <h3>No courses enrolled yet</h3>
+            <p>Browse our batches and start your learning journey today!</p>
+            <a href="batch_page.html" class="browse-btn">Explore Batches</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">STUDYVERSE</div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#">About Us</a>
+                <a href="batch_page.html">Courses</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="copyright">© 2023 StudyVerse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const hamburger = document.getElementById('hamburger');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const logoutBtn = document.getElementById('logout-btn');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        const batchesGrid = document.getElementById('batches-grid');
+        const emptyState = document.getElementById('empty-state');
+        const userName = document.getElementById('user-name');
+        const enrolledCourses = document.getElementById('enrolled-courses');
+        const activeCourses = document.getElementById('active-courses');
+        const completedCourses = document.getElementById('completed-courses');
+        const learningHours = document.getElementById('learning-hours');
+
+        // Toggle dropdown menu
+        hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('studyverse_current_user');
+            localStorage.removeItem('studyverse_remember');
+            window.location.href = 'index.html';
+        });
+
+        // Show notification
+        function showNotification(text, isError = false) {
+            notificationText.textContent = text;
+            notification.className = isError ? 'notification error show' : 'notification show';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Load user data and enrolled batches
+        function loadUserData() {
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('studyverse_current_user') || '{}');
+            
+            if (!currentUser.email) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display user name
+            userName.textContent = currentUser.fullName || 'Student';
+            
+            // Get enrolled batches
+            const enrolledBatches = JSON.parse(localStorage.getItem('studyverse_enrolled_batches') || '{}');
+            const userBatches = enrolledBatches[currentUser.email] || [];
+            
+            // Update stats
+            enrolledCourses.textContent = userBatches.length;
+            activeCourses.textContent = userBatches.length; // For simplicity, all are active
+            completedCourses.textContent = '0';
+            learningHours.textContent = userBatches.length * 12; // Approximate hours
+            
+            // Display batches or empty state
+            if (userBatches.length === 0) {
+                emptyState.style.display = 'block';
+                batchesGrid.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                batchesGrid.style.display = 'grid';
+                displayEnrolledBatches(userBatches);
+            }
+        }
+
+        // Display enrolled batches
+        function displayEnrolledBatches(batches) {
+            batchesGrid.innerHTML = '';
+            
+            batches.forEach(batch => {
+                const batchCard = document.createElement('div');
+                batchCard.className = 'batch-card';
+                
+                batchCard.innerHTML = `
+                    <h3>${batch.name}</h3>
+                    <div class="class">Class ${batch.class}</div>
+                    <ul class="features">
+                        <li>Live Classes with Notes</li>
+                        <li>HW with Video Solution</li>
+                        <li>Regular Tests</li>
+                        <li>Doubt Solving</li>
+                        <li>Progress Tracking</li>
+                    </ul>
+                    <div class="enroll-date">
+                        Enrolled on: ${new Date(batch.enrolledAt).toLocaleDateString()}
+                    </div>
+                    <div class="action-buttons">
+                        <a href="course-content.html?class=${batch.class}&batch=${encodeURIComponent(batch.name)}" class="continue-btn">Continue Learning</a>
+                        <button class="unenroll-btn" data-class="${batch.class}" data-batch="${batch.name}">Unenroll</button>
+                    </div>
+                `;
+                
+                batchesGrid.appendChild(batchCard);
+            });
+            
+            // Add event listeners to unenroll buttons
+            const unenrollButtons = document.querySelectorAll('.unenroll-btn');
+            unenrollButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const classNum = button.getAttribute('data-class');
+                    const batchName = button.getAttribute('data-batch');
+                    unenrollFromBatch(classNum, batchName);
+                });
+            });
+        }
+
+        // Unenroll from a batch
+        function unenrollFromBatch(classNum, batchName) {
+            if (!confirm('Are you sure you want to unenroll from this batch?')) {
+                return;
+            }
+            
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('studyverse_current_user') || '{}');
+            
+            // Get enrolled batches
+            const enrolledBatches = JSON.parse(localStorage.getItem('studyverse_enrolled_batches') || '{}');
+            let userBatches = enrolledBatches[currentUser.email] || [];
+            
+            // Remove the batch
+            userBatches = userBatches.filter(batch => 
+                !(batch.class === classNum && batch.name === batchName)
+            );
+            
+            // Update localStorage
+            enrolledBatches[currentUser.email] = userBatches;
+            localStorage.setItem('studyverse_enrolled_batches', JSON.stringify(enrolledBatches));
+            
+            // Show notification
+            showNotification('Successfully unenrolled from the batch!');
+            
+            // Reload the page
+            setTimeout(() => {
+                loadUserData();
+            }, 1000);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyVerse - Aarambh Batch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #6c63ff;
+            --primary-light: #837dff;
+            --secondary: #4a40cc;
+            --accent: #ff6b6b;
+            --accent-light: #ff8e8e;
+            --light: #f8f9fa;
+            --dark: #2c2c54;
+            --success: #28a745;
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --hover: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* Navbar */
+        nav {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 12px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1000; /* Yeh line add karo */
+}
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .hamburger {
+            font-size: 1.3rem;
+            color: white;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: var(--hover);
+        }
+
+        .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    width: 200px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    z-index: 1001; /* Yeh line add karo */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.3s ease;
+}
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .dropdown-menu .user-details h4 {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .dropdown-menu .user-details p {
+            font-size: 0.75rem;
+            background: #6c63ff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        .dropdown-menu .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 6px;
+            background: #f5f5f5;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-menu .menu-item:hover {
+            background: #e0e0e0;
+        }
+
+        .dropdown-menu .menu-item i {
+            font-size: 1rem;
+            width: 18px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Batch Header */
+        .batch-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .batch-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .batch-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Subjects Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+.subject-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    cursor: pointer;
+    height: 165px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1; /* Yeh line add karo */
+}
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .subject-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 60%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .subject-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .subject-card p {
+            opacity: 0.8;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .topics-count {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .progress-section p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .progress-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .progress-stat .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .progress-stat .label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 5%;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .footer-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .social-icons a {
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .batch-header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .batch-header p {
+                font-size: 0.9rem;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .subject-card {
+                padding: 15px;
+                min-height: 160px;
+            }
+            
+            .subject-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .progress-section {
+                padding: 20px;
+            }
+            
+            .progress-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-links {
+                gap: 10px;
+            }
+            
+            .dropdown-menu {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .progress-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .batch-header {
+                padding: 15px;
+            }
+            
+            .subject-card h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">STUDY<span>VERSE</span></div>
+        
+        <div class="menu-container">
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="dropdown-menu" id="dropdown-menu">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <div class="user-details">
+                        <h4 id="user-name">Student Name</h4>
+                        <p>Premium Member</p>
+                    </div>
+                </div>
+                
+                <div class="menu-item" onclick="window.location.href='study_page.html'">
+                    <i class="fas fa-book"></i>
+                    <span>Study</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='batch_page.html'">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Batches</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='tests.html'">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Test Series</span>
+                </div>
+                <div class="menu-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Batch Header -->
+        <div class="batch-header">
+            <h1>Aarambh - Class 10</h1>
+            <p>Your complete learning journey for CBSE Class 10</p>
+        </div>
+
+        <!-- Subjects Grid -->
+        <div class="subjects-grid">
+            <div class="subject-card" onclick="window.location.href='maths.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Mathematics</h3>
+                <p>Algebra, Geometry, Trigonometry</p>
+                <div class="topics-count">12 Topics</div>
+            </div>
+
+            <div class="subject-card" onclick="window.location.href='science.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>Science</h3>
+                <p>Physics, Chemistry, Biology</p>
+                <div class="topics-count">15 Topics</div>
+            </div>
+
+            <div class="subject-card" onclick="window.location.href='sst.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-globe-asia"></i>
+                </div>
+                <h3>Social Science</h3>
+                <p>History, Geography, Civics</p>
+                <div class="topics-count">10 Topics</div>
+            </div>
+
+            <div class="subject-card" onclick="window.location.href='english.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>English</h3>
+                <p>Grammar and Literature</p>
+                <div class="topics-count">8 Topics</div>
+            </div>
+
+            <div class="subject-card" onclick="window.location.href='hindi.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h3>Hindi</h3>
+                <p>व्याकरण और साहित्य</p>
+                <div class="topics-count">9 Topics</div>
+            </div>
+
+            <div class="subject-card" onclick="window.location.href='it.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3>IT</h3>
+                <p>Programming and Applications</p>
+                <div class="topics-count">7 Topics</div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <h2>Your Progress</h2>
+            <p>Track your learning journey</p>
+            
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <div class="number">42%</div>
+                    <div class="label">Completed</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="number">18</div>
+                    <div class="label">Topics Done</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="number">12</div>
+                    <div class="label">Tests Taken</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="number">24</div>
+                    <div class="label">Study Hours</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">STUDYVERSE</div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#">About</a>
+                <a href="batches.html">Courses</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="copyright">© 2023 StudyVerse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const hamburger = document.getElementById('hamburger');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userName = document.getElementById('user-name');
+
+        // Toggle dropdown menu
+        hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('studyverse_current_user');
+            localStorage.removeItem('studyverse_remember');
+            window.location.href = 'index.html';
+        });
+
+        // Load user data
+        function loadUserData() {
+            const currentUser = JSON.parse(localStorage.getItem('studyverse_current_user') || '{}');
+            if (!currentUser.email) {
+                window.location.href = 'index.html';
+                return;
+            }
+            userName.textContent = currentUser.fullName || 'Student';
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+        });
+    </script>
+</body>
+</html>

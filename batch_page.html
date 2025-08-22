@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyVerse - Classes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #6c63ff;
+            --primary-light: #837dff;
+            --secondary: #4a40cc;
+            --accent: #ff6b6b;
+            --accent-light: #ff8e8e;
+            --light: #f8f9fa;
+            --dark: #2c2c54;
+            --success: #28a745;
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --hover: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .hamburger {
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: var(--hover);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 15px;
+            width: 200px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            background: grey;
+        }
+
+        .menu-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-item:hover {
+            background: var(--hover);
+        }
+
+        .menu-item i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Class Filters */
+        .class-filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .class-filter {
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .class-filter:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .class-filter.active {
+            background: var(--primary);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        .class-filter h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* Batches Grid */
+        .batches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .batch-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .batch-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-light);
+        }
+
+        .batch-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .batch-card .class {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .batch-card .features {
+            margin: 15px 0;
+        }
+
+        .batch-card .features li {
+            margin-bottom: 8px;
+            list-style-type: none;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .batch-card .features li:before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .batch-card .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 15px 0;
+            color: var(--accent);
+        }
+
+        .batch-card .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        .enroll-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .batch-card:hover .enroll-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .enroll-btn:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 30px 5%;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .class-filters {
+                gap: 10px;
+            }
+            
+            .class-filter {
+                padding: 12px 20px;
+            }
+            
+            .batches-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Successfully enrolled! Go to menu and get your batch in study section.</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">STUDY<span>VERSE</span></div>
+        
+        <div class="menu-container">
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="dropdown-menu" id="dropdown-menu">
+                <div class="menu-item" id="study-btn">
+                    <i class="fas fa-book"></i>
+                    <span>Study</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </div>
+              <div class="menu-item" id="logout-btn">
+    <i class="fas fa-sign-out-alt"></i>
+    <span>Logout</span>
+</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-title">
+            <h1>Choose Your Class</h1>
+            <p>Select your class to see available batches</p>
+        </div>
+
+        <!-- Class Filters -->
+        <div class="class-filters">
+            <div class="class-filter active" data-class="9">
+                <h3>Class 9</h3>
+            </div>
+            <div class="class-filter" data-class="10">
+                <h3>Class 10</h3>
+            </div>
+            <div class="class-filter" data-class="11">
+                <h3>Class 11</h3>
+            </div>
+            <div class="class-filter" data-class="12">
+                <h3>Class 12</h3>
+            </div>
+        </div>
+
+        <!-- Batches Grid -->
+        <div class="batches-grid" id="batches-grid">
+            <!-- Batch cards will be generated here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">STUDYVERSE</div>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">About Us</a>
+                <a href="#">Courses</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="copyright">© 2023 StudyVerse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Batch data
+        const batchData = {
+            9: [
+                {
+                    name: "Aarambh Batch",
+                    price: "₹4,999",
+                    originalPrice: "₹7,999",
+                    features: [
+                        "Complete CBSE Syllabus Coverage",
+                        "100+ Video Lectures",
+                        "Doubt Solving Sessions",
+                        "5 Practice Tests",
+                        "Study Material Included"
+                    ]
+                },
+                {
+                    name: "Foundation Batch",
+                    price: "₹3,499",
+                    originalPrice: "₹5,999",
+                    features: [
+                        "Basic Concept Building",
+                        "70+ Video Lectures",
+                        "Weekly Doubt Sessions",
+                        "3 Practice Tests",
+                        "PDF Notes"
+                    ]
+                }
+            ],
+            10: [
+                {
+                    name: "Aarambh Batch",
+                    price: "₹5,499",
+                    originalPrice: "₹8,499",
+                    features: [
+                        "Full Board Exam Preparation",
+                        "120+ Video Lectures",
+                        "Daily Doubt Solving",
+                        "10 Practice Tests",
+                        "Complete Study Material"
+                    ]
+                },
+                {
+                    name: "Board Special",
+                    price: "₹6,999",
+                    originalPrice: "₹9,999",
+                    features: [
+                        "Focused on Board Exams",
+                        "150+ Video Lectures",
+                        "24/7 Doubt Support",
+                        "15 Mock Tests",
+                        "Revision Crash Course"
+                    ]
+                }
+            ],
+            11: [
+                {
+                    name: "Prarambh Batch",
+                    price: "₹6,999",
+                    originalPrice: "₹10,999",
+                    features: [
+                        "JEE/NEET Foundation",
+                        "200+ Video Lectures",
+                        "Expert Faculty",
+                        "12 Practice Tests",
+                        "Dedicated Doubt Forum"
+                    ]
+                },
+                {
+                    name: "Science Warrior",
+                    price: "₹7,499",
+                    originalPrice: "₹11,499",
+                    features: [
+                        "PCB/PCM Stream",
+                        "250+ Video Lectures",
+                        "Interactive Sessions",
+                        "15 Practice Tests",
+                        "Personal Mentor"
+                    ]
+                }
+            ],
+            12: [
+                {
+                    name: "Prarambh Batch",
+                    price: "₹7,999",
+                    originalPrice: "₹12,999",
+                    features: [
+                        "JEE/NEET Advanced",
+                        "300+ Video Lectures",
+                        "Intensive Practice",
+                        "20 Mock Tests",
+                        "College Selection Guidance"
+                    ]
+                },
+                {
+                    name: "Board Champion",
+                    price: "₹6,499",
+                    originalPrice: "₹9,999",
+                    features: [
+                        "Complete Board Syllabus",
+                        "180+ Video Lectures",
+                        "Quick Revision Modules",
+                        "12 Sample Papers",
+                        "Exam Strategies"
+                    ]
+                }
+            ]
+        };
+
+        // DOM Elements
+        const hamburger = document.getElementById('hamburger');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const classFilters = document.querySelectorAll('.class-filter');
+        const batchesGrid = document.getElementById('batches-grid');
+        const notification = document.getElementById('notification');
+        const studyBtn = document.getElementById('study-btn');
+        
+        
+        // DOM Elements
+const logoutBtn = document.getElementById('logout-btn');
+
+// Logout functionality
+logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('studyverse_current_user');
+    localStorage.removeItem('studyverse_remember');
+    window.location.href = 'index.html';
+});
+
+        // Toggle dropdown menu
+        hamburger.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Class filter functionality
+        classFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                // Remove active class from all filters
+                classFilters.forEach(f => f.classList.remove('active'));
+                
+                // Add active class to clicked filter
+                filter.classList.add('active');
+                
+                // Get selected class
+                const selectedClass = filter.getAttribute('data-class');
+                
+                // Display batches for selected class
+                displayBatches(selectedClass);
+            });
+        });
+
+        // Display batches for a class
+        function displayBatches(className) {
+            // Clear current batches
+            batchesGrid.innerHTML = '';
+            
+            // Get batches for the selected class
+            const batches = batchData[className];
+            
+            // Create batch cards
+            batches.forEach(batch => {
+                const batchCard = document.createElement('div');
+                batchCard.className = 'batch-card';
+                
+                batchCard.innerHTML = `
+                    <h3>${batch.name}</h3>
+                    <div class="class">Class ${className}</div>
+                    <ul class="features">
+                        ${batch.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <div class="price">${batch.price} <span>${batch.originalPrice}</span></div>
+                    <button class="enroll-btn" data-class="${className}" data-batch="${batch.name}">Enroll Now</button>
+                `;
+                
+                batchesGrid.appendChild(batchCard);
+            });
+            
+            // Add event listeners to enroll buttons
+            const enrollButtons = document.querySelectorAll('.enroll-btn');
+            enrollButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const classNum = button.getAttribute('data-class');
+                    const batchName = button.getAttribute('data-batch');
+                    enrollInBatch(classNum, batchName);
+                });
+            });
+        }
+
+        // Enroll in a batch
+        function enrollInBatch(classNum, batchName) {
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('studyverse_current_user') || '{}');
+            
+            if (!currentUser.email) {
+                alert('Please login first to enroll in a batch');
+                return;
+            }
+            
+            // Get enrolled batches or initialize empty array
+            const enrolledBatches = JSON.parse(localStorage.getItem('studyverse_enrolled_batches') || '{}');
+            
+            // Add batch to user's enrolled batches
+            if (!enrolledBatches[currentUser.email]) {
+                enrolledBatches[currentUser.email] = [];
+            }
+            
+            // Check if already enrolled
+            const alreadyEnrolled = enrolledBatches[currentUser.email].some(
+                batch => batch.class === classNum && batch.name === batchName
+            );
+            
+            if (!alreadyEnrolled) {
+                enrolledBatches[currentUser.email].push({
+                    class: classNum,
+                    name: batchName,
+                    enrolledAt: new Date().toISOString()
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('studyverse_enrolled_batches', JSON.stringify(enrolledBatches));
+                
+                // Show notification
+                showNotification();
+            } else {
+                alert('You are already enrolled in this batch!');
+            }
+        }
+
+        // Show notification
+        function showNotification() {
+            notification.classList.add('show');
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Study button functionality
+        studyBtn.addEventListener('click', () => {
+    // Redirect to study page
+    window.location.href = 'study_page.html';
+});
+
+        // Initialize with Class 9 batches
+        displayBatches('9');
+        
+        // Check if user is logged in
+document.addEventListener('DOMContentLoaded', () => {
+    const currentUser = JSON.parse(localStorage.getItem('studyverse_current_user') || '{}');
+    
+    if (!currentUser.email) {
+        // Redirect to login page if not logged in
+        window.location.href = 'index.html';
+    }
+});
+
+    </script>
+</body>
+</html>
