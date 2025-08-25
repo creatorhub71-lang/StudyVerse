@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyVerse - Free Education Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,60 +18,125 @@
             --primary: #6c63ff;
             --secondary: #4a40cc;
             --accent: #ff6b6b;
+            --accent-light: #ff8e8e;
             --light: #f8f9fa;
             --dark: #343a40;
             --success: #28a745;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient);
             color: var(--light);
             overflow-x: hidden;
             min-height: 100vh;
             background-attachment: fixed;
         }
 
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         /* Navbar */
         nav {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 1.2rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: fixed;
             width: 100%;
             z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .logo span {
             color: var(--accent);
         }
 
+        .logo i {
+            font-size: 1.8rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         .enroll-btn {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enroll-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .enroll-btn:hover::before {
+            left: 100%;
         }
 
         .enroll-btn:hover {
             background: #ff5252;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
         /* Hero Section */
@@ -85,131 +151,200 @@
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 900px;
             z-index: 1;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
             animation: fadeInDown 1s ease;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
             opacity: 0.9;
-            animation: fadeInUp 1s ease;
+            animation: fadeInUp 1s ease 0.3s both;
+            font-weight: 300;
         }
 
         .counter {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 15px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 20px;
             margin: 2rem 0;
             display: inline-block;
-            animation: scaleIn 1s ease;
+            animation: scaleIn 1s ease 0.6s both;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .counter h2 {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             margin-bottom: 0.5rem;
+            color: var(--accent);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .counter p {
-            font-size: 1rem;
+            font-size: 1.2rem;
             margin: 0;
+            font-weight: 500;
         }
 
         /* About Section */
         .about {
-            padding: 5rem 5%;
+            padding: 6rem 5%;
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
+            font-size: 3rem;
+            margin-bottom: 4rem;
             position: relative;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
             width: 100px;
-            height: 4px;
+            height: 5px;
             background: var(--accent);
-            border-radius: 2px;
+            border-radius: 3px;
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
         }
 
         .feature {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
+            background: var(--glass);
+            padding: 3rem 2rem;
+            border-radius: 20px;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: all 0.4s ease;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature:hover::before {
+            opacity: 1;
         }
 
         .feature:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .feature i {
-            font-size: 3rem;
+            font-size: 4rem;
             color: var(--accent);
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .feature h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .feature p {
-            opacity: 0.8;
+            opacity: 0.9;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
         }
 
         /* Footer */
         footer {
             background: rgba(0, 0, 0, 0.2);
-            padding: 2rem 5%;
+            padding: 3rem 5%;
             text-align: center;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
         }
 
         .footer-content {
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .footer-logo {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .footer-links {
             display: flex;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .footer-links a {
             color: var(--light);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
         }
 
         .footer-links a:hover {
@@ -218,30 +353,42 @@
 
         .social-icons {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .social-icons a {
             color: var(--light);
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
         }
 
         .social-icons a:hover {
             color: var(--accent);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         .copyright {
-            opacity: 0.7;
-            font-size: 0.9rem;
+            opacity: 0.8;
+            font-size: 1rem;
+            margin-top: 2rem;
         }
 
         /* Animations */
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-50px);
             }
             to {
                 opacity: 1;
@@ -252,7 +399,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -263,7 +410,7 @@
         @keyframes scaleIn {
             from {
                 opacity: 0;
-                transform: scale(0.9);
+                transform: scale(0.8);
             }
             to {
                 opacity: 1;
@@ -272,26 +419,95 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-links {
+                gap: 2rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
             }
             
-            .features {
-                grid-template-columns: 1fr;
+            .counter h2 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
             }
             
             .footer-links {
                 flex-direction: column;
                 gap: 1rem;
             }
+            
+            .social-icons a {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .enroll-btn {
+                padding: 0.8rem 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .counter {
+                padding: 1.5rem;
+            }
+            
+            .counter h2 {
+                font-size: 2rem;
+            }
+            
+            .feature {
+                padding: 2rem 1.5rem;
+            }
+            
+            .feature i {
+                font-size: 3rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bg-animation"></div>
+
     <!-- Navbar -->
     <nav>
-        <div class="logo">STUDY<span>VERSE</span></div>
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            STUDY<span>VERSE</span>
+        </div>
         <button onclick="window.location.href='login.html'" class="enroll-btn">Enroll Now</button>
     </nav>
 
@@ -350,13 +566,37 @@
     </footer>
 
     <script>
+        // Create animated background circles
+        function createBackground() {
+            const bgAnimation = document.getElementById('bg-animation');
+            const colors = ['rgba(124, 58, 237, 0.1)', 'rgba(79, 70, 229, 0.1)', 'rgba(99, 102, 241, 0.1)'];
+            
+            for (let i = 0; i < 15; i++) {
+                const circle = document.createElement('div');
+                circle.classList.add('bg-circle');
+                
+                const size = Math.random() * 200 + 50;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                circle.style.width = `${size}px`;
+                circle.style.height = `${size}px`;
+                circle.style.background = color;
+                circle.style.top = `${Math.random() * 100}%`;
+                circle.style.left = `${Math.random() * 100}%`;
+                circle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                circle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                bgAnimation.appendChild(circle);
+            }
+        }
+
         // Counter Animation
         function animateCounter() {
             const counter = document.getElementById('count');
             const target = parseInt(counter.innerText);
             let count = 0;
-            const duration = 2000; // in milliseconds
-            const increment = target / (duration / 16); // 60fps
+            const duration = 2000;
+            const increment = target / (duration / 16);
             
             const updateCounter = () => {
                 if (count < target) {
@@ -373,6 +613,7 @@
 
         // Initialize when page loads
         window.onload = function() {
+            createBackground();
             animateCounter();
             
             // Add animation to features on scroll

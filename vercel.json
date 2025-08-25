@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/batch", "destination": "/batch_page.html" },
+    { "source": "/study", "destination": "/study_page.html" },
+    { "source": "/main", "destination": "/main_study.html" },
+    { "source": "/sub", "destination": "/sub.html" }
+  ]
+}
