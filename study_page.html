@@ -682,17 +682,8 @@
 
         // Function to determine subject page based on class and batch
         function getSubjectPage(classNum, batchName) {
-            // Customize these mappings based on your actual page names
-            const pageMap = {
-                'Aarambh Batch': `class-${classNum}-subjects.html`,
-                'Foundation Batch': `class-${classNum}-foundation.html`,
-                'Prarambh Batch': `class-${classNum}-prarambh.html`,
-                'Science Warrior': `class-${classNum}-science.html`,
-                'Board Special': `class-${classNum}-board.html`,
-                'Board Champion': `class-${classNum}-champion.html`
-            };
-            
-            return pageMap[batchName] || `subjects.html?class=${classNum}&batch=${encodeURIComponent(batchName)}`;
+            // Always use sub.html with query parameters
+            return `sub.html?class=${classNum}&batch=${encodeURIComponent(batchName)}`;
         }
 
         // Load user data and enrolled batches
